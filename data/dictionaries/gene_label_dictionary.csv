@@ -1,0 +1,11 @@
+Column,Type,Source,How it is computed,Role,Notes
+gene_symbol,string,HGNC,Common symbol across all sources,ID,One row per gene
+expr_mean_tumor,float,Xena,Mean log2(TPM+1) across LUAD tumour samples,Feature,
+expr_enrichment,float,Xena,Mean tumour minus mean normal log2(TPM+1),Feature,Public expression/enrichment (handout)
+expr_sd_tumor,float,Xena,Standard deviation across tumour samples,Feature,Variability (handout)
+gistic_amp_freq,float,cBioPortal,Fraction of samples with GISTIC >= +1,Feature,Dropped in amplification ablation
+gistic_highamp_freq,float,cBioPortal,Fraction of samples with GISTIC = +2,Feature,Dropped in amplification ablation
+is_surface,bool,HPA,Location includes Plasma membrane,Eligibility + split stratifier,Nonessential surface genes stay eligible
+n_luad_lines,int,DepMap,Number of LUAD lines with a non-missing effect for this gene,QC only,Not a feature
+label_dependency,float,DepMap,minus median Chronos effect across LUAD lines; only if n_luad_lines >= 3,LABEL,Higher = cells depend on it more. Missing = unlabeled (kept out of train/val/test)
+(excluded) any other DepMap-derived column,-,DepMap,"e.g. mean effect, dependency probability, common-essential flag",EXCLUDED,Would leak the label

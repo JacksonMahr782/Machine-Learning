@@ -1,0 +1,7 @@
+Source,Key fields we use,Join key,Unit / scale,Used for,Not used for
+E-MTAB-16585,"Cell barcode, donor/sample ID, cell-state annotation, TACSTD2 and LGR5 expression",Cell barcode,Normalized log counts (check notebook),Paper reproduction only,Not joined to the LUAD gene table
+Xena TCGA-LUAD,Gene x sample expression; sample type (tumour/normal),Gene symbol (map Ensembl IDs to HGNC),log2(TPM+1),Features,-
+cBioPortal GISTIC,Gene x sample discrete copy number,Hugo_Symbol,"-2,-1,0,+1,+2",Features (amplification),-
+DepMap CRISPRGeneEffect,Gene x cell-line Chronos effect,'SYMBOL (ENTREZ)' column header -> symbol,"Chronos score (0 = no effect, about -1 = typical essential gene)",Label only,Any feature (leakage)
+DepMap Model.csv,"ModelID, OncotreeCode, lineage",ModelID,-,Selecting LUAD lines,-
+HPA subcellular_location,"Gene, Main location, Additional location, Reliability",Gene name,Text categories,Surface eligibility + stratification,Label

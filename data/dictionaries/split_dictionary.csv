@@ -1,0 +1,11 @@
+Item,Rule,Value
+Unit of splitting,Genes (each gene appears in exactly one split),gene_symbol
+Proportions,Train / validation / test,70 / 15 / 15
+Stratification,Same share of surface genes in each split,is_surface
+Labeled genes,Target size of labeled gene set,"2,000"
+Test surface candidates,Surface genes in the test split that get ranked,20
+Unlabeled genes,No label (fewer than 3 LUAD lines),Not in any split; may be scored later
+Random seed,Fixed so the split is reproducible,42 (change if group agrees)
+Output file,"Columns: gene_symbol, is_surface, split, seed",splits.csv (Checkpoint 2)
+Metrics (for reference),Overall and surface-only,"MAE, Spearman"
+Models (for reference),Compared at Checkpoint 2-3,"Constant, Ridge, Random forest, Gradient boosting"
