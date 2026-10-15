@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# data lives in Box, not GitHub
+data/raw/
+data/processed/
+*.h5ad
+*.h5
+*.zip
+*.gz
+.ipynb_checkpoints/
