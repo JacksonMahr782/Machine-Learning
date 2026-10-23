@@ -1,0 +1,5 @@
+gene_symbol,expr_mean_tumor,expr_enrichment,expr_sd_tumor,gistic_amp_freq,gistic_highamp_freq,is_surface,n_luad_lines,label_dependency,split
+GENE_A,6.2,1.4,1.1,0.18,0.03,TRUE,11,0.42,train
+GENE_B,3.0,-0.5,0.8,0.05,0.00,FALSE,11,0.05,validation
+GENE_C,8.7,2.3,1.6,0.31,0.07,TRUE,9,0.88,test
+GENE_D,1.1,0.2,0.4,0.02,0.00,FALSE,2,,(unlabeled)

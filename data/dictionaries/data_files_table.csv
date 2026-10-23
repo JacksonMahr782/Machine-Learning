@@ -1,0 +1,11 @@
+#,File,Source,Release / version,Format,Size (as shown in Windows),Date downloaded,One row is,One column is,Used for
+1,CRISPRGeneEffect.csv,DepMap Portal,Public 26Q3,CSV,"485,489 KB (~474 MB)",2026-10-15,One cell line (ModelID),One gene ('SYMBOL (ENTREZ)'),Label only (Chronos effect)
+2,Model.csv,DepMap Portal,Public 26Q3,CSV,772 KB,2026-10-15,One cell line,"One attribute (ModelID, OncotreeCode, lineage...)",Picking LUAD lines (OncotreeCode = LUAD)
+3,TCGA-LUAD.star_tpm.tsv.gz,UCSC Xena (GDC TCGA-LUAD hub),star_tpm version not recorded,TSV (gzip),"164,516 KB (~161 MB)",2026-10-19,One gene (Ensembl ID),One sample (tumour or normal),"Features: expression, enrichment, variability"
+4,TCGA-LUAD.clinical.tsv.gz,UCSC Xena (GDC TCGA-LUAD hub),phenotype v09-07-2024,TSV (gzip),147 KB,2026-10-19,One sample,One clinical/phenotype field,Tumour vs normal sample type
+5,luad_tcga_pan_can_atlas_2018.tar.gz (data_cna.txt inside),cBioPortal,TCGA LUAD PanCancer Atlas 2018,TAR.GZ (tab-separated text inside),"912,219 KB (~891 MB)",2026-10-19,One gene (Hugo_Symbol),"One tumour sample (GISTIC -2, -1, 0, +1, +2)",Features: amplification frequency
+6,subcellular_location.tsv.zip,Human Protein Atlas,Ensembl 109,TSV (zip),247 KB,2026-10-19,One gene,"Gene, Main/Additional location, Reliability",Surface eligibility + split stratification
+7,E-MTAB-16585.zip,ArrayExpress (TROP2 paper),E-MTAB-16585,ZIP of processed .txt files,"1,304,207 KB",2026-10-19,(12 processed .txt files across the 3 zips),(cells x genes + cell metadata),Paper reproduction (Figure 1)
+8,E-MTAB-16585-2.zip,ArrayExpress (TROP2 paper),E-MTAB-16585,ZIP of processed .txt files,"1,281,957 KB",2026-10-19,(see row 7),(see row 7),Paper reproduction (Figure 1)
+9,E-MTAB-16585 3.zip,ArrayExpress (TROP2 paper),E-MTAB-16585,ZIP of processed .txt files,"1,076,004 KB",2026-10-19,(see row 7),(see row 7),Paper reproduction (Figure 1)
+10,figures/Figure_01.ipynb,GitHub ORCA-HD/TROP2_in_CRC,commit d04c1bd (2026-07-01),Jupyter notebook,592 KB,2026-10-19 (viewed),-,-,Paper reproduction code
