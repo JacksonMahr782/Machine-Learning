@@ -1,11 +1,12 @@
-Item,Rule,Value
-Unit of splitting,Genes (each gene appears in exactly one split),gene_symbol
-Proportions,Train / validation / test,70 / 15 / 15
-Stratification,Same share of surface genes in each split,is_surface
-Labeled genes,Target size of labeled gene set,"2,000"
-Test surface candidates,Surface genes in the test split that get ranked,20
-Unlabeled genes,No label (fewer than 3 LUAD lines),Not in any split; may be scored later
-Random seed,Fixed so the split is reproducible,42 (change if group agrees)
-Output file,"Columns: gene_symbol, is_surface, split, seed",splits.csv (Checkpoint 2)
-Metrics (for reference),Overall and surface-only,"MAE, Spearman"
-Models (for reference),Compared at Checkpoint 2-3,"Constant, Ridge, Random forest, Gradient boosting"
+Item,Rule,Value,CP1 value / change
+Unit of splitting,"Gene; genes in the same 10 Mb genomic block (chrom + floor(start / 10 Mb)) always go to the same split",gene grouped by block,CP1: single genes. Changed so genes sharing an amplicon (near-identical GISTIC features) cannot sit in both train and test
+Method,"StratifiedGroupKFold, 20 folds of ~5%: 14 folds train, 3 val, 3 test",seed 42,CP1: plain stratified random split
+Proportions,Train / val / test,70 / 15 / 15 (approximate because whole blocks move together),Same target
+Stratification,Same share of surface genes in each split,is_surface,Same
+Labeled genes,Minimum size of labeled gene set,"at least 2,000",CP1 said 2000 as target; it is a minimum
+Test surface candidates,Minimum surface genes in the test split (script fails otherwise),at least 20,Same
+Unlabeled genes,No label (fewer than 3 LUAD lines),Not in any split,Same
+Random seed,Fixed so the split is reproducible,42,Same
+Output files,"split_manifest.csv (gene, split, block, chrom, start, is_surface) and split_counts.json",data/splits/,CP1: splits.csv with gene_symbol/split/seed; split labels are train / val / test (CP1: validation)
+Metrics (for reference),Overall and surface-only,"MAE, MSE, Spearman",Same plus MSE
+Models (for reference),Compared at Checkpoint 2,"Constant, Ridge, Random forest, Gradient boosting",Same

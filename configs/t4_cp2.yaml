@@ -1,12 +1,12 @@
 # T4 Checkpoint 2 configuration. All paths are relative to the repo root.
 raw_dir: data/raw
 files:
-  xena_tpm: TCGA-LUAD.star_tpm.tsv.gz            # UCSC Xena GDC hub, log2(TPM+1)
+  xena_tpm: TCGA-LUAD.star_tpm.tsv.gz            # UCSC Xena GDC hub, version 05-10-2024 (GDC DR40), log2(TPM+1)
   xena_probemap: gencode.v36.annotation.gtf.gene.probemap  # Ensembl ID -> symbol, chrom, start
   cbio_cna: data_cna.txt                         # cBioPortal luad_tcga_pan_can_atlas_2018 (GISTIC -2..2)
   depmap_effect: CRISPRGeneEffect.csv            # DepMap Public 26Q3, Chronos
   depmap_model: Model.csv                        # DepMap Public 26Q3
-  hpa_location: subcellular_location.tsv         # HPA (unzipped)
+  hpa_location: subcellular_location.tsv         # HPA v25 (Ensembl 109), unzipped
 processed_dir: data/processed
 splits_dir: data/splits
 results_dir: results
@@ -15,6 +15,15 @@ models_dir: models
 label:
   oncotree_code: LUAD
   min_lines: 3
+
+# Surface eligibility from HPA subcellular_location.tsv (never a feature or the label).
+# A gene is surface if "Main location" or "Additional location" contains one of `locations`
+# (exact HPA terms, e.g. add "Cell Junctions" to count junction proteins).
+# drop_uncertain: true sets genes with HPA Reliability = "Uncertain" to non-surface.
+# Genes missing from HPA are non-surface (column hpa_annotated = 0 marks them).
+surface:
+  locations: ["Plasma membrane"]
+  drop_uncertain: false
 
 split:
   seed: 42

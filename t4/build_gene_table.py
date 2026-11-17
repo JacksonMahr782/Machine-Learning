@@ -8,7 +8,7 @@ DepMap supplies only the label. HPA supplies only the surface flag (not a featur
 import argparse
 import numpy as np
 import pandas as pd
-from .common import load_config, raw, write_json, sha256
+from .common import load_config, raw, write_json, sha256, BASE_FEATURES, INTERACTIONS
 
 
 def tcga_sample_type(barcode):
@@ -75,10 +75,17 @@ def surface_flag(cfg, log):
     if not path.exists() and path.with_suffix(".tsv.zip").exists():
         path = path.with_suffix(".tsv.zip")
     hpa = pd.read_csv(path, sep="\t")
-    loc = hpa["Main location"].fillna("") + ";" + hpa["Additional location"].fillna("")
-    hpa["is_surface"] = loc.str.contains("Plasma membrane", regex=False).astype(int)
+    sc = cfg["surface"]
+    wanted = set(sc["locations"])
+    loc = (hpa["Main location"].fillna("") + ";" + hpa["Additional location"].fillna("")).str.split(";")
+    hpa["is_surface"] = loc.apply(lambda parts: int(any(p.strip() in wanted for p in parts)))
+    if sc["drop_uncertain"]:
+        hpa.loc[hpa["Reliability"] == "Uncertain", "is_surface"] = 0
     hpa = hpa.drop_duplicates("Gene name").set_index("Gene name")
+    log["surface_rule"] = {"locations": sorted(wanted), "drop_uncertain": sc["drop_uncertain"],
+                           "unannotated_genes": "non-surface"}
     log["hpa_genes"], log["hpa_surface_genes"] = len(hpa), int(hpa["is_surface"].sum())
+    log["hpa_surface_genes_uncertain"] = int(((hpa["is_surface"] == 1) & (hpa["Reliability"] == "Uncertain")).sum())
     return hpa[["is_surface", "Reliability"]].rename(columns={"Reliability": "hpa_reliability"})
 
 
@@ -102,6 +109,13 @@ def main():
     g["mean_x_amp"] = g["expr_mean_tumor"] * g["gistic_amp_freq"]
     g["enrich_x_amp"] = g["expr_enrichment"] * g["gistic_amp_freq"]
     g.index.name = "gene"
+
+    # Ridge and gradient boosting cannot take NaN: drop genes missing any feature
+    # (e.g. no tumour/normal expression or every GISTIC call missing).
+    feat = BASE_FEATURES + INTERACTIONS
+    log["genes_dropped_missing_features"] = int(g[feat].isna().any(axis=1).sum())
+    g = g.dropna(subset=feat)
+    log["genes_in_table"] = len(g)
 
     lab_mask = g["dependency"].notna()
     log["genes_labeled"] = int(lab_mask.sum())
