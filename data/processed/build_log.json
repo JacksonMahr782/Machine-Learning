@@ -1,0 +1,61 @@
+{
+  "inputs": {
+    "xena_tpm": {
+      "file": "TCGA-LUAD.star_tpm.tsv.gz",
+      "sha256": "460dab5f84d8fa7da8ef17c913d2816cd66a34e837908e64e0b3c7d65e3d40ee"
+    },
+    "xena_probemap": {
+      "file": "gencode.v36.annotation.gtf.gene.probemap",
+      "sha256": "f027752d663b1da74f4113998bf008e6ebecfa3732607513e027bb6eb1f635b5"
+    },
+    "cbio_cna": {
+      "file": "data_cna.txt",
+      "sha256": "a8d57404e489629de65c1ab585f16a82fdb0e3383fcd3549dcdf151cc8b6a18a"
+    },
+    "depmap_effect": {
+      "file": "CRISPRGeneEffect.csv",
+      "sha256": "1e0c492944a7297c0eda179081a1e81a1cfe41a97628facd7eddbdda1a7504ee"
+    },
+    "depmap_model": {
+      "file": "Model.csv",
+      "sha256": "65eb1895800e71a963a3ab56e5d08c8d006cb0d9e7aa68f7e34a3810a2a3cbc7"
+    }
+  },
+  "xena_genes_raw": 60660,
+  "xena_samples_tumor": 530,
+  "xena_samples_normal": 59,
+  "xena_patients_tumor": 516,
+  "xena_patients_normal": 59,
+  "xena_genes_unique_symbol": 59427,
+  "cna_genes": 25087,
+  "cna_samples": 511,
+  "depmap_luad_models_in_model_csv": 98,
+  "depmap_luad_lines_with_effects": 53,
+  "depmap_genes": 18434,
+  "depmap_genes_labeled": 17930,
+  "surface_rule": {
+    "locations": [
+      "Plasma membrane"
+    ],
+    "drop_uncertain": false,
+    "unannotated_genes": "non-surface"
+  },
+  "hpa_genes": 13597,
+  "hpa_surface_genes": 2263,
+  "hpa_surface_genes_uncertain": 149,
+  "genes_with_all_features": 22646,
+  "genes_dropped_missing_features": 0,
+  "genes_in_table": 22646,
+  "genes_labeled": 16756,
+  "genes_labeled_surface": 2041,
+  "label_summary": {
+    "count": 16756.0,
+    "mean": 0.146,
+    "std": 0.4016,
+    "min": -0.4803,
+    "25%": -0.0377,
+    "50%": 0.0341,
+    "75%": 0.1376,
+    "max": 5.3358
+  }
+}
