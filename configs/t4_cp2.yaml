@@ -1,0 +1,57 @@
+# T4 Checkpoint 2 configuration. All paths are relative to the repo root.
+raw_dir: data/raw
+files:
+  xena_tpm: TCGA-LUAD.star_tpm.tsv.gz            # UCSC Xena GDC hub, log2(TPM+1)
+  xena_probemap: gencode.v36.annotation.gtf.gene.probemap  # Ensembl ID -> symbol, chrom, start
+  cbio_cna: data_cna.txt                         # cBioPortal luad_tcga_pan_can_atlas_2018 (GISTIC -2..2)
+  depmap_effect: CRISPRGeneEffect.csv            # DepMap Public 26Q3, Chronos
+  depmap_model: Model.csv                        # DepMap Public 26Q3
+  hpa_location: subcellular_location.tsv         # HPA (unzipped)
+processed_dir: data/processed
+splits_dir: data/splits
+results_dir: results
+models_dir: models
+
+label:
+  oncotree_code: LUAD
+  min_lines: 3
+
+split:
+  seed: 42
+  fractions: [0.70, 0.15, 0.15]      # train / validation / test
+  block_mb: 10                        # genes in the same 10 Mb window stay in the same split
+  min_test_surface: 20
+
+seeds: [0, 1, 2, 3, 4]                # tree models are refit with each seed on the frozen config
+bootstrap: 2000                       # test-gene bootstrap resamples for 95% CIs
+
+# Comparable budget: every trained model gets exactly 12 validation-scored configurations.
+grids:
+  ridge:
+    alpha: [0.001, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000]
+  random_forest:
+    n_estimators: [300]
+    max_depth: [6, 12, null]
+    min_samples_leaf: [5, 20]
+    max_features: [0.5, 1.0]
+  gradient_boosting:
+    n_estimators: [300]
+    learning_rate: [0.03, 0.1]
+    max_depth: [2, 3, 4]
+    subsample: [0.7, 1.0]
+
+# Declared before any test prediction (copied into results/frozen_choices.json).
+evaluation:
+  primary_metric: spearman_all        # test Spearman over all held-out genes
+  success_target: 0.20                # clearly above the constant control (0) with a CI excluding 0
+  tolerance: 0.02                     # primary may trail the strongest trained comparator by <= 0.02 Spearman
+
+# Held-out surface-candidate ranking (A7). Weights fixed before test genes are scored.
+# Dependency is supporting evidence only; nonessential surface genes stay eligible.
+ranking:
+  weights:
+    expr_enrichment: 0.4             # tumour over normal lung
+    expr_mean_tumor: 0.3             # abundance in tumour
+    gistic_amp_freq: 0.1             # amplified in tumours
+    predicted_dependency: 0.2        # supporting evidence only
+  top_n: 20
