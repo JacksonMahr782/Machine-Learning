@@ -62,11 +62,12 @@ evaluation:
 
 # Held-out surface-candidate ranking (A7). Weights fixed before test genes are scored.
 # Dependency is supporting evidence only; nonessential surface genes stay eligible.
-# Change from CP1: CP1 slide 7 planned to use a "public-data guide score", but no such formula is given in
-# the CP2 handout or course materials we have, so we use these team weights (committed 2026-11-17 in 5a2cb54,
-# before any test prediction). Score = weighted sum of percentile ranks within eligible test genes.
+# CP1 handout: "Lock the guide's score" (T4 overview / public-data guide in the course Project_Overviews folder).
+# If that guide's formula is obtained, replace these weights with it BEFORE running train_eval / rank_surface.
+# Otherwise (change from CP1): these team weights, committed 2026-11-17 in 5a2cb54 before any test prediction.
+# Score = weighted sum of percentile ranks within eligible test genes.
 ranking:
-  formula_source: "T4 team weights, configs/t4_cp2.yaml (commit 5a2cb54, 2026-11-17); no course guide formula available"
+  formula_source: "T4 team weights, configs/t4_cp2.yaml (commit 5a2cb54, 2026-11-17); course public-data guide formula could not be located (checked 2026-11-19)"
   weights:
     expr_enrichment: 0.4             # tumour over normal lung
     expr_mean_tumor: 0.3             # abundance in tumour
