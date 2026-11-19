@@ -24,6 +24,14 @@ Status: all 6 public sources accessed and downloaded (Oct 15-19, 2026). All 12 p
 - Leakage: nothing derived from DepMap gene effects is used as a feature. DepMap only supplies the label.
 - Scope: the TROP2 paper reproduction (E-MTAB-16585) and the LUAD dependency model are separate tasks.
 
+## CP2 changes to these dictionaries
+The CSVs now use the column names the code writes (`t4/build_gene_table.py`, `t4/make_splits.py`). `T4_CP1_data_start.xlsx` is kept as submitted at CP1.
+- `gene_symbol` -> `gene`, `label_dependency` -> `dependency`, split label `validation` -> `val`, `splits.csv` -> `data/splits/split_manifest.csv` + `split_counts.json`.
+- New feature columns: `mean_x_amp`, `enrich_x_amp` (interaction improvement). New QC/grouping columns: `chrom`, `start`, `block`, `hpa_annotated`, `hpa_reliability`.
+- Split unit is still the gene, but genes are grouped by 10 Mb genomic block so a shared amplicon cannot leak across splits.
+- Expression CV, mentioned in the CP1 report, is not used; SD is the variability feature.
+- Surface rule is set in `configs/t4_cp2.yaml` (`surface:`). Releases recorded: Xena star_tpm 05-10-2024, HPA v25.
+
 ## Where things live
 - GitHub (`data/dictionaries/`, `docs/`): CSVs, equations and code. Small text files only.
 - Box (`data/raw/`): the downloaded data files (several GB, too large for GitHub).

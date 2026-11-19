@@ -1,0 +1,27 @@
+{
+  "seed": 42,
+  "unit": "gene (grouped by 10 Mb block)",
+  "counts": {
+    "train": {
+      "genes": 11749,
+      "surface_genes": 1435,
+      "blocks": 212,
+      "label_mean": 0.1475,
+      "surface_share": 0.1221
+    },
+    "val": {
+      "genes": 2504,
+      "surface_genes": 302,
+      "blocks": 48,
+      "label_mean": 0.1298,
+      "surface_share": 0.1206
+    },
+    "test": {
+      "genes": 2503,
+      "surface_genes": 304,
+      "blocks": 46,
+      "label_mean": 0.1551,
+      "surface_share": 0.1215
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "primary": "gradient_boosting|base",
+  "primary_metric": "spearman_all",
+  "primary_value": 0.42725254005167645,
+  "success_target": 0.2,
+  "target_met": true,
+  "primary_ci95": [
+    0.3955994463996099,
+    0.4626829774276556
+  ],
+  "strongest_comparator": "random_forest|base",
+  "comparator_value": 0.4341519603923748,
+  "gap": -0.006899420340698348,
+  "tolerance": 0.02,
+  "comparability_met": true,
+  "paired_bootstrap_gap_ci95": [
+    -0.016442230442123573,
+    0.0065933809284102925
+  ]
+}

@@ -1,12 +1,12 @@
 # T4 Checkpoint 2 configuration. All paths are relative to the repo root.
 raw_dir: data/raw
 files:
-  xena_tpm: TCGA-LUAD.star_tpm.tsv.gz            # UCSC Xena GDC hub, log2(TPM+1)
+  xena_tpm: TCGA-LUAD.star_tpm.tsv.gz            # UCSC Xena GDC hub, version 05-10-2024 (GDC DR40), log2(TPM+1)
   xena_probemap: gencode.v36.annotation.gtf.gene.probemap  # Ensembl ID -> symbol, chrom, start
   cbio_cna: data_cna.txt                         # cBioPortal luad_tcga_pan_can_atlas_2018 (GISTIC -2..2)
   depmap_effect: CRISPRGeneEffect.csv            # DepMap Public 26Q3, Chronos
   depmap_model: Model.csv                        # DepMap Public 26Q3
-  hpa_location: subcellular_location.tsv         # HPA (unzipped)
+  hpa_location: subcellular_location.tsv         # HPA v25 (Ensembl 109), unzipped
 processed_dir: data/processed
 splits_dir: data/splits
 results_dir: results
@@ -15,6 +15,15 @@ models_dir: models
 label:
   oncotree_code: LUAD
   min_lines: 3
+
+# Surface eligibility from HPA subcellular_location.tsv (never a feature or the label).
+# A gene is surface if "Main location" or "Additional location" contains one of `locations`
+# (exact HPA terms, e.g. add "Cell Junctions" to count junction proteins).
+# drop_uncertain: true sets genes with HPA Reliability = "Uncertain" to non-surface.
+# Genes missing from HPA are non-surface (column hpa_annotated = 0 marks them).
+surface:
+  locations: ["Plasma membrane"]
+  drop_uncertain: false
 
 split:
   seed: 42
@@ -45,10 +54,20 @@ evaluation:
   primary_metric: spearman_all        # test Spearman over all held-out genes
   success_target: 0.20                # clearly above the constant control (0) with a CI excluding 0
   tolerance: 0.02                     # primary may trail the strongest trained comparator by <= 0.02 Spearman
+  tolerance_justification: >-
+    0.02 is about one standard error of a test-set Spearman correlation near 0.2 with 2,503 test genes
+    (SE ~ sqrt(1.06/(n-3)) * (1 - rho^2) = 0.020), assuming independent genes. Test genes come from only
+    46 correlated 10 Mb blocks, so the true sampling noise is larger; a gap below 0.02 is therefore within
+    one optimistic standard error and not a meaningful difference. Fixed 2026-11-19, before any test prediction.
 
 # Held-out surface-candidate ranking (A7). Weights fixed before test genes are scored.
 # Dependency is supporting evidence only; nonessential surface genes stay eligible.
+# CP1 handout: "Lock the guide's score" (T4 overview / public-data guide in the course Project_Overviews folder).
+# If that guide's formula is obtained, replace these weights with it BEFORE running train_eval / rank_surface.
+# Otherwise (change from CP1): these team weights, committed 2026-11-17 in 5a2cb54 before any test prediction.
+# Score = weighted sum of percentile ranks within eligible test genes.
 ranking:
+  formula_source: "T4 team weights, configs/t4_cp2.yaml (commit 5a2cb54, 2026-11-17); course public-data guide formula could not be located (checked 2026-11-19)"
   weights:
     expr_enrichment: 0.4             # tumour over normal lung
     expr_mean_tumor: 0.3             # abundance in tumour

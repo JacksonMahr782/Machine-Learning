@@ -1,11 +1,17 @@
-Column,Type,Source,How it is computed,Role,Notes
-gene_symbol,string,HGNC,Common symbol across all sources,ID,One row per gene
-expr_mean_tumor,float,Xena,Mean log2(TPM+1) across LUAD tumour samples,Feature,
-expr_enrichment,float,Xena,Mean tumour minus mean normal log2(TPM+1),Feature,Public expression/enrichment (handout)
-expr_sd_tumor,float,Xena,Standard deviation across tumour samples,Feature,Variability (handout)
-gistic_amp_freq,float,cBioPortal,Fraction of samples with GISTIC >= +1,Feature,Dropped in amplification ablation
-gistic_highamp_freq,float,cBioPortal,Fraction of samples with GISTIC = +2,Feature,Dropped in amplification ablation
-is_surface,bool,HPA,Location includes Plasma membrane,Eligibility + split stratifier,Nonessential surface genes stay eligible
-n_luad_lines,int,DepMap,Number of LUAD lines with a non-missing effect for this gene,QC only,Not a feature
-label_dependency,float,DepMap,minus median Chronos effect across LUAD lines; only if n_luad_lines >= 3,LABEL,Higher = cells depend on it more. Missing = unlabeled (kept out of train/val/test)
-(excluded) any other DepMap-derived column,-,DepMap,"e.g. mean effect, dependency probability, common-essential flag",EXCLUDED,Would leak the label
+Column,Type,Source,How it is computed,Role,CP1 name / change,Notes
+gene,string,HGNC symbol,Symbol shared by gencode v36 probemap; cBioPortal Hugo_Symbol; DepMap column header,ID,Was gene_symbol,One row per gene. Renamed genes that differ between sources drop out
+chrom,string,gencode v36 probemap,Chromosome of the gene,Split grouping only,New in CP2,Not a feature
+start,int,gencode v36 probemap,Gene start position (bp),Split grouping only,New in CP2,Not a feature
+expr_mean_tumor,float,Xena,Mean log2(TPM+1) across LUAD primary tumour samples (TCGA sample code 01-09),Feature,Same,
+expr_enrichment,float,Xena,expr_mean_tumor minus mean log2(TPM+1) across normal samples (code 10-19),Feature,Same,Public expression/enrichment (handout). Few normal samples so noisy
+expr_sd_tumor,float,Xena,Standard deviation (ddof=1) of log2(TPM+1) across tumour samples,Feature,Same; CV from the CP1 report is not used,Variability (handout). CV is redundant with SD/mean on log scale and unstable near zero
+gistic_amp_freq,float,cBioPortal,Fraction of samples with GISTIC call >= +1 (non-missing calls),Feature,Same,Dropped in amplification ablation
+gistic_highamp_freq,float,cBioPortal,Fraction of samples with GISTIC call = +2,Feature,Same,Dropped in amplification ablation
+mean_x_amp,float,derived,expr_mean_tumor * gistic_amp_freq,Feature (interactions set only),New in CP2,Improvement; dropped in amplification ablation
+enrich_x_amp,float,derived,expr_enrichment * gistic_amp_freq,Feature (interactions set only),New in CP2,Improvement; dropped in amplification ablation
+is_surface,int 0/1,HPA v25,1 if Main or Additional location contains a term in configs/t4_cp2.yaml surface.locations (default Plasma membrane),Eligibility + split stratifier,Was bool; rule now set in config,Never a feature or the label. Genes not in HPA = 0
+hpa_annotated,int 0/1,HPA v25,1 if the gene is in subcellular_location.tsv,QC only,New in CP2,Not a feature
+hpa_reliability,string,HPA v25,HPA Reliability (Enhanced / Supported / Approved / Uncertain),QC only,New in CP2,Not a feature. surface.drop_uncertain can zero out Uncertain genes
+n_luad_lines,int,DepMap 26Q3,Number of LUAD lines (OncotreeCode = LUAD) with a non-missing effect for this gene,QC only,Same,Not a feature
+dependency,float,DepMap 26Q3,minus median Chronos effect across LUAD lines; NaN if n_luad_lines < 3,LABEL,Was label_dependency,Higher = cells depend on it more. Missing = unlabeled (kept out of train/val/test)
+(excluded) any other DepMap-derived column,-,DepMap,"e.g. mean effect, dependency probability, common-essential flag, other lineages",EXCLUDED,Same,Would leak the label
