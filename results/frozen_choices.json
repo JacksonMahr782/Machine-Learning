@@ -1,0 +1,72 @@
+{
+  "frozen_at_utc": "2026-11-19T14:59:58",
+  "rule": "hyper-parameters: lowest validation MSE per (model, feature set); primary: highest validation Spearman among trained models on base/interactions",
+  "primary": {
+    "model": "gradient_boosting",
+    "feature_set": "base"
+  },
+  "configs": {
+    "constant|base": {},
+    "gradient_boosting|base": {
+      "n_estimators": 300,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "subsample": 0.7
+    },
+    "random_forest|base": {
+      "n_estimators": 300,
+      "max_depth": 12,
+      "min_samples_leaf": 5,
+      "max_features": 0.5
+    },
+    "ridge|base": {
+      "alpha": 300
+    },
+    "constant|interactions": {},
+    "gradient_boosting|interactions": {
+      "n_estimators": 300,
+      "learning_rate": 0.03,
+      "max_depth": 3,
+      "subsample": 0.7
+    },
+    "random_forest|interactions": {
+      "n_estimators": 300,
+      "max_depth": 12,
+      "min_samples_leaf": 5,
+      "max_features": 0.5
+    },
+    "ridge|interactions": {
+      "alpha": 0.001
+    },
+    "constant|no_amp": {},
+    "gradient_boosting|no_amp": {
+      "n_estimators": 300,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "subsample": 1.0
+    },
+    "random_forest|no_amp": {
+      "n_estimators": 300,
+      "max_depth": 6,
+      "min_samples_leaf": 20,
+      "max_features": 1.0
+    },
+    "ridge|no_amp": {
+      "alpha": 300
+    }
+  },
+  "evaluation": {
+    "primary_metric": "spearman_all",
+    "success_target": 0.2,
+    "tolerance": 0.02,
+    "tolerance_justification": "0.02 is about one standard error of a test-set Spearman correlation near 0.2 with 2,503 test genes (SE ~ sqrt(1.06/(n-3)) * (1 - rho^2) = 0.020), assuming independent genes. Test genes come from only 46 correlated 10 Mb blocks, so the true sampling noise is larger; a gap below 0.02 is therefore within one optimistic standard error and not a meaningful difference. Fixed 2026-11-19, before any test prediction."
+  },
+  "ranking_weights": {
+    "expr_enrichment": 0.4,
+    "expr_mean_tumor": 0.3,
+    "gistic_amp_freq": 0.1,
+    "predicted_dependency": 0.2
+  },
+  "split_manifest_sha256": "06d4afa912e993f5316759d988976af9c28a0c43fe264ced34d81c401f1eb744",
+  "gene_table_sha256": "4e3be15a965273ee05fefe2414a94e24444a446d5f1ed29857761aa00467ff8f"
+}
