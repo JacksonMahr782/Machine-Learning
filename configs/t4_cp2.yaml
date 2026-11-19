@@ -54,10 +54,19 @@ evaluation:
   primary_metric: spearman_all        # test Spearman over all held-out genes
   success_target: 0.20                # clearly above the constant control (0) with a CI excluding 0
   tolerance: 0.02                     # primary may trail the strongest trained comparator by <= 0.02 Spearman
+  tolerance_justification: >-
+    0.02 is about one standard error of a test-set Spearman correlation near 0.2 with 2,503 test genes
+    (SE ~ sqrt(1.06/(n-3)) * (1 - rho^2) = 0.020), assuming independent genes. Test genes come from only
+    46 correlated 10 Mb blocks, so the true sampling noise is larger; a gap below 0.02 is therefore within
+    one optimistic standard error and not a meaningful difference. Fixed 2026-11-19, before any test prediction.
 
 # Held-out surface-candidate ranking (A7). Weights fixed before test genes are scored.
 # Dependency is supporting evidence only; nonessential surface genes stay eligible.
+# Change from CP1: CP1 slide 7 planned to use a "public-data guide score", but no such formula is given in
+# the CP2 handout or course materials we have, so we use these team weights (committed 2026-11-17 in 5a2cb54,
+# before any test prediction). Score = weighted sum of percentile ranks within eligible test genes.
 ranking:
+  formula_source: "T4 team weights, configs/t4_cp2.yaml (commit 5a2cb54, 2026-11-17); no course guide formula available"
   weights:
     expr_enrichment: 0.4             # tumour over normal lung
     expr_mean_tumor: 0.3             # abundance in tumour
