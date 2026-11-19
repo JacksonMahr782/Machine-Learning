@@ -47,14 +47,14 @@ or pip: `pip install -r requirements.txt`.
 
 All inputs are public. Download them into `data/raw/` with the exact names listed in `data/raw/README.md`
 (URLs, releases and download dates are in `data/dictionaries/download_log.csv`). Total about 1.6 GB compressed.
-Our copies are also on the group Box folder.
+Our copies are also on the group Box folder. The processed `data/processed/gene_table.csv` (with `build_log.json`) and `data/splits/` are committed, so training and ranking run without the raw files; rebuild them from `data/raw/` to reproduce from scratch.
 
 | Input | Release | Used for |
 |---|---|---|
-| UCSC Xena GDC TCGA-LUAD `star_tpm` + gencode v36 probemap | GDC hub | expression features (tumour vs normal by TCGA barcode) |
+| UCSC Xena GDC TCGA-LUAD `star_tpm` + gencode v36 probemap | version 05-10-2024 (GDC DR40) | expression features (tumour vs normal by TCGA barcode) |
 | cBioPortal `luad_tcga_pan_can_atlas_2018` `data_cna.txt` | PanCancer Atlas 2018 | GISTIC amplification features |
 | DepMap `CRISPRGeneEffect.csv`, `Model.csv` | Public 26Q3 | label only (OncotreeCode = LUAD) |
-| HPA `subcellular_location.tsv` | Ensembl 109 | surface eligibility and split stratification only |
+| HPA `subcellular_location.tsv` | v25 (Ensembl 109); main site is now v26, use the v25 archive | surface eligibility and split stratification only |
 
 ## Commands
 
